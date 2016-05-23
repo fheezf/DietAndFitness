@@ -1,0 +1,4 @@
+class AddUserIdToDiets < ActiveRecord::Migration
+  def change
+  end
+end

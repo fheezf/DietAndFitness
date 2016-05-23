@@ -1,0 +1,7 @@
+<% if @fitness.punctuation < 0 %>
+$("div#punctuation :nth-child(1)" ).replaceWith("<button id='rojo' class='btn-punctuation ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-minus'></button>");
+$("div#punctuation :nth-child(2)" ).replaceWith("<h3>"+<%= @fitness.punctuation %>+"</h3>");
+<% else %>
+$("div#punctuation :nth-child(1)" ).replaceWith("<button id='verde' class='btn-punctuation ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-plus'></button>");
+$("div#punctuation :nth-child(2)" ).replaceWith("<h3>"+<%= @fitness.punctuation %>+"</h3>");
+<% end %>

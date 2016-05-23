@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html manifest="/offline.appcache_2">
+<head>
+  <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DietaFitness</title>
+  <%= stylesheet_link_tag    'application', media: 'all'%>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div data-role="page" data-theme="b">
+		<div data-role="header" data-position="fixed">
+		  <%= yield :botones %>
+			<h1 id="tit"><%= yield :titulo %></h1>
+
+    
+
+
+		</div>  <!--Fin del header-->
+
+
+<div class="ui-content" role="main"><%= yield %></div> <!--Fin del content-->
+<%= yield :footer %>
+		
+	</div>
+
+</body>
+</html>
+<script>
+
+    var a = document.createElement("img");
+    var marca = Date.now();
+    a.src = "http://192.168.1.37:3000/assets/images/icons-png/alert-black.png?"+marca;
+    a.onload = onSuccessHandler;
+
+    function onSuccessHandler(){
+
+          if (localStorage.getItem("logged") != "false") {
+            $(".ui-header").append("<div class='ui-btn-right'><a class='miboton ui-btn  ui-corner-all ui-btn-icon-notext ui-btn-inline ui-icon-edit' href='/users/"+localStorage.getItem('logged')[6]+"/edit'>Modificar password</a><a class='miboton ui-btn  ui-corner-all ui-btn-icon-notext ui-btn-inline ui-icon-power' href='/logout'>Cerrar sesión</a></div>");
+          }else{
+             $(".ui-header").append("<div class='ui-btn-right'><a class='miboton ui-btn  ui-corner-all ui-btn-icon-notext ui-btn-inline ui-icon-action' href='/login'>Login</a><a class='miboton ui-btn  ui-corner-all ui-btn-icon-notext ui-btn-inline ui-icon-user' href='/users/new'>Registro</a></div>");
+          }
+    }
+</script>

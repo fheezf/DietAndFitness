@@ -1,0 +1,205 @@
+
+<%= content_for :titulo %>
+<% content_for :botones do %>
+    <%= link_to 'Atras', :back, class: "miboton ui-btn-left ui-btn  ui-corner-all ui-btn-icon-notext ui-icon-back" %>
+<% end %>
+
+<p id="autor">
+  <strong>Author:</strong>
+  
+</p>
+
+<div class="ui-btn-right" id="punctuation">
+</div>
+
+<p id="duracion">
+  <strong>Duration:</strong>
+</p>
+
+<p id="dificultad">
+  <strong>Difficulty:</strong>
+</p>
+
+<p>
+  <strong>Imagen:</strong>
+</p>
+
+<p id="imagen_muestra_dieta">
+</p>
+
+<p>
+  <strong>Comidas:</strong>
+</p>
+
+<div data-role="collapsibleset" id="comidas" >
+
+</div>
+
+<p id="descripcion">
+  <strong>Descrición:</strong>
+</p>
+
+<div class="ui-grid-b ui-responsive" id="showbotones">
+
+    <div class="ui-block-a"></div>
+    <div class="ui-block-b"></div>
+    <div class="ui-block-c"></div>
+  
+</div>
+
+<%= content_for :footer do %>
+  <div data-role="footer" data-position="fixed" data-theme="b">
+		  <div data-role="navbar">
+			<ul >
+				<li><a href="/nosotros.html" class="ui-btn-active ui-btn-icon-top ui-icon-info" data-ajax="false">Nosotros</a></li>
+				<li><a href="/diets" class="ui-btn-icon-top ui-icon-bars" data-ajax="false">Dietas</a></li>
+        <li><a href="/diets?user_id=" class="btn-disabled ui-btn-icon-top ui-icon-star" data-ajax="false" >Favoritos</a></li>
+			</ul>	
+		  </div>
+		</div> <!--fin del Footer-->
+<% end %>
+
+<script>
+    $(document).on("pagecreate", muestra_dieta( localStorage.getItem("pulsado")));
+
+      function muestra_dieta (identificador2) {
+
+          for (var j=0; j<JSON.parse(localStorage.getItem('diets')).length;j++){
+            if (JSON.parse(localStorage.getItem('diets'))[j].id == identificador2){
+              identificador = j;
+            }
+          }
+
+          $('#tit').append(JSON.parse(localStorage.getItem('diets'))[identificador].title);
+          $('#autor').append(JSON.parse(localStorage.getItem('diets'))[identificador].author);
+          $('#dificultad').append(JSON.parse(localStorage.getItem('diets'))[identificador].difficulty);
+          $('#duracion').append(JSON.parse(localStorage.getItem('diets'))[identificador].duration);
+          $('#descripcion').append(JSON.parse(localStorage.getItem('diets'))[identificador].description);
+          if (JSON.parse(localStorage.getItem('diets'))[identificador].punctuation < 0){
+              $('#punctuation').append("<button id='rojo' class='btn-punctuation ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-minus'></button>");
+              $('#punctuation').append("<h3>"+JSON.parse(localStorage.getItem('diets'))[identificador].punctuation+"</h3>");
+              if (localStorage.getItem("logged") != "false") {
+                $('#punctuation').append("<a class='ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-u' data-remote='true' href='/diets/puntuacion?flag=suma&id="+JSON.parse(localStorage.getItem("diets"))[identificador].id+"' id='verde'>suma</a>");
+                $('#punctuation').append("<a class='ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-d' data-remote='true' href='/diets/puntuacion?flag=resta&id="+JSON.parse(localStorage.getItem("diets"))[identificador].id+"' id='rojo'>resta</a>");
+              }else{
+                $('#punctuation').append("<a class='btn-disabled ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-u' data-remote='true' href='/diets/puntuacion?flag=suma&id=' id='verde'>suma</a>");
+                $('#punctuation').append("<a class='btn-disabled ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-d' data-remote='true' href='/diets/puntuacion?flag=resta&id=' id='rojo'>resta</a>");
+              }
+          }else{
+              $('#punctuation').append("<button id='verde' class='btn-punctuation ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-plus'></button>");
+              $('#punctuation').append("<h3>"+JSON.parse(localStorage.getItem('diets'))[identificador].punctuation+"</h3>");
+              if (localStorage.getItem("logged") != "false") {
+                $('#punctuation').append("<a class='ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-u' data-remote='true' href='/diets/puntuacion?flag=suma&id="+JSON.parse(localStorage.getItem("diets"))[identificador].id+"' id='verde'>suma</a>");
+                $('#punctuation').append("<a class='ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-d' data-remote='true' href='/diets/puntuacion?flag=resta&id="+JSON.parse(localStorage.getItem("diets"))[identificador].id+"' id='rojo'>resta</a>");
+              }else{
+                $('#punctuation').append("<a class='btn-disabled ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-u' data-remote='true' href='/diets/puntuacion?flag=suma&id=' id='verde'>suma</a>");
+                $('#punctuation').append("<a class='btn-disabled ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-d' data-remote='true' href='/diets/puntuacion?flag=resta&id=' id='rojo'>resta</a>");
+              }
+          }
+
+          if (JSON.parse(localStorage.getItem('diets'))[identificador].imagen != null){
+           $('#imagen_muestra_dieta').append("<img src='"+localStorage.getItem(JSON.parse(localStorage.getItem('diets'))[identificador].id+"-org-diet")+"'alt='"+JSON.parse(localStorage.getItem('diets'))[identificador].title+ "' />");
+         }
+          var a = JSON.parse(localStorage.getItem('diets'))[identificador].foods.split("|");
+          var count = 0;
+          var week = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
+          for (var i=0; i<7;i++){
+              $("#comidas").append("<div data-role='collapsible'><h2>"+week[i]+"</h2><ul id='"+week[i]+"' data-role='listview' data-theme='c' data-inset='true'>");
+              var list2 = a[i].split(",");
+              $.each(list2, function(index, value){$("#"+week[i]+"").append("<li>"+value+"</li>");});
+                  
+              
+              $("#comidas").append("</ul></div>");
+          }
+          
+
+          $(".ui-block-a").append("<a class='ui-btn ui-corner-all ui-btn-icon-top ui-icon- ui-btn-d' data-remote='true' href='/diets/toggle_favorito?id="+JSON.parse(localStorage.getItem("diets"))[identificador].id+"' >Favorito</a>");
+          $(".ui-block-b").append("<a class='ui-btn ui-corner-all ui-btn-icon-top ui-icon-info ui-btn-d' href='/diets/"+JSON.parse(localStorage.getItem("diets"))[identificador].id+"/edit' >Editar</a>");
+          $(".ui-block-c").append("<a class='ui-btn ui-corner-all ui-btn-icon-top ui-icon-delete' data-confirm='¿Estas seguro que quieres eliminarlo?' data-method='delete' href='/diets/"+JSON.parse(localStorage.getItem("diets"))[identificador].id+"' rel='nofollow' >Eliminar</a>");
+
+
+
+
+
+
+
+
+
+
+
+
+          var a = document.createElement("img");
+          var marca = Date.now();
+          a.src = "http://192.168.1.37:3000/assets/images/icons-png/alert-black.png?"+marca;
+          a.onerror = onErrorHandler;
+          a.onload = onSuccessHandler;
+
+          function onErrorHandler(){
+              $(".ui-footer .ui-block-c a").removeClass('ui-icon-star');
+              $(".ui-footer .ui-block-c a").addClass('ui-icon-lock');
+              $("a#verde").addClass("btn-disabled");
+              $("a#rojo").addClass("btn-disabled");
+
+              $("#showbotones .ui-block-a a").removeClass('ui-icon-plus');
+              $("#showbotones .ui-block-a a").removeClass('ui-icon-minus');
+              $("#showbotones .ui-block-a a").addClass('ui-icon-lock');
+              $("#showbotones .ui-block-b a").removeClass('ui-icon-info');
+              $("#showbotones .ui-block-b a").addClass('ui-icon-lock');
+              $("#showbotones .ui-block-c a").removeClass('ui-icon-delete');
+              $("#showbotones .ui-block-c a").addClass('ui-icon-lock');
+              $('#showbotones .ui-block-a a').addClass("btn-disabled");
+              $('#showbotones .ui-block-b a').addClass("btn-disabled");
+              $('#showbotones .ui-block-c a').addClass("btn-disabled");
+           }
+
+          function onSuccessHandler(){
+
+              if (localStorage.getItem("logged") != "false") {
+                 var src = "/diets?user_id="+localStorage.getItem("logged")[6];
+                  $(".ui-footer .ui-grid-b .ui-block-c a").attr("href", src);
+                  $(".ui-footer .ui-block-c a").removeClass('btn-disabled');
+
+                  $("#showbotones .ui-block-a a").removeClass('ui-icon-plus');
+                  $("#showbotones .ui-block-a a").removeClass('ui-icon-minus');
+                  favorite(JSON.parse(localStorage.getItem('diets'))[identificador].id);
+              }else{
+                  $(".ui-footer .ui-block-c a").removeClass('ui-icon-star');
+                  $(".ui-footer .ui-block-c a").addClass('ui-icon-lock');
+                  $("a#verde").addClass("btn-disabled");
+                  $("a#rojo").addClass("btn-disabled");
+
+                  $("#showbotones .ui-block-a a").removeClass('ui-icon-plus');
+                  $("#showbotones .ui-block-a a").removeClass('ui-icon-minus');
+                  $("#showbotones .ui-block-a a").addClass('ui-icon-lock');
+                  $("#showbotones .ui-block-b a").removeClass('ui-icon-info');
+                  $("#showbotones .ui-block-b a").addClass('ui-icon-lock');
+                  $("#showbotones .ui-block-c a").removeClass('ui-icon-delete');
+                  $("#showbotones .ui-block-c a").addClass('ui-icon-lock');
+                  $('#showbotones .ui-block-a a').addClass("btn-disabled");
+                  $('#showbotones .ui-block-b a').addClass("btn-disabled");
+                  $('#showbotones .ui-block-c a').addClass("btn-disabled");
+              }
+         }
+
+        
+      }
+      
+      function favorite (idd){
+          $.ajax({
+              type: "GET",
+              url: "muestra_dieta_favorito",
+              data: { "id": idd },
+              dataType: "html",
+              error: function(){
+		          	alert( "No se ha podido establecer conexión con el servidor");
+              },
+              success: function(msg){
+                var ca = msg.split('<div class="ui-content" role="main">');
+                var resp = ca[1].split('</div> <!--Fin del content-->');
+                console.log('resp: ' + resp[0]);
+                $("#showbotones .ui-block-a a").addClass("ui-icon-"+resp[0]);
+              }
+          })
+          
+      }
+ </script>

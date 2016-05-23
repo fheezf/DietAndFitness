@@ -1,0 +1,49 @@
+<% if flash.any? %>
+    <div id="error_explanation">
+      <ul>
+      <% flash.keys.each do |msg| %>
+        <li><%= flash[msg] %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<% content_for :titulo, "Login" %>
+<% content_for :botones do %>
+    <%= link_to 'Atras', :back, class: "miboton ui-btn-left ui-btn  ui-corner-all ui-btn-icon-notext ui-icon-back" %>
+<% end %>
+<%= form_tag session_path do %>
+
+  <div class="field">
+    <%= label_tag :email %><br/>
+    <%= text_field_tag :email %>
+  </div>
+
+  <div class="field">
+    <%= label_tag :password %><br/>
+    <%= password_field_tag :password %>
+  </div>
+  
+  <div class="actions">
+    <%= submit_tag 'login' %>
+  </div>
+<% end %>
+    <%= button_to 'Registro', new_user_path, :method => :get %><br/>
+
+<%= content_for :footer do %>
+  <div data-role="footer" data-position="fixed" data-theme="b">
+		  <div data-role="navbar">
+			<ul >
+				<li><a href="/nosotros.html" class="ui-btn-active ui-btn-icon-top ui-icon-info" data-ajax="false">Nosotros</a></li>
+				<li><a href="/diets" class="ui-btn-icon-top ui-icon-bars" data-ajax="false">Dietas</a></li>
+				<li><a href="#" class="ui-btn-icon-top ui-icon-star" data-ajax="false" >Ejercicios</a></li>
+			</ul>	
+		  </div>
+		</div> <!--fin del Footer-->
+<% end %>
+
+<script>
+$(document).on("pagecreate", function(){
+      $('.ui-navbar .ui-btn').removeClass("ui-btn-active");
+});
+</script>
+

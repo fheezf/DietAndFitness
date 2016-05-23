@@ -1,0 +1,31 @@
+<% if flash.any? %>
+    <div id="error_explanation">
+      <ul>
+      <% flash.keys.each do |msg| %>
+        <li><%= flash[msg] %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<% content_for :titulo, "Login" %>
+<% content_for :botones do %>
+    <%= link_to 'Atras', :back, class: "miboton ui-btn-left ui-btn  ui-corner-all ui-btn-icon-notext ui-icon-back" %>
+<% end %>
+<%= form_tag session_path do %>
+
+  <div class="field">
+    <%= label_tag :email %><br/>
+    <%= text_field_tag :email %>
+  </div>
+
+  <div class="field">
+    <%= label_tag :password %><br/>
+    <%= password_field_tag :password %>
+  </div>
+  
+  <div class="actions">
+    <%= submit_tag 'login' %>
+  </div>
+<% end %>
+    <%= button_to 'Registro', new_user_path, :method => :get %><br/>
+

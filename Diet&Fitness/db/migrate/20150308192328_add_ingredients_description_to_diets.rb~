@@ -1,0 +1,4 @@
+class AddIngredientsDescriptionToDiets < ActiveRecord::Migration
+  def change
+  end
+end

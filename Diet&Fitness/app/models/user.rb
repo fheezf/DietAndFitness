@@ -1,0 +1,41 @@
+require 'digest'
+class User < ActiveRecord::Base
+  attr_accessor :password  
+  before_save :encrypt_new_password 
+  has_many :diets, dependent: :nullify
+  has_many :fitnesses, dependent: :nullify
+  has_and_belongs_to_many :diets_users, :foreign_key => 'user_id', :class_name => "Diet"
+  has_and_belongs_to_many :fitnesses_users, :foreign_key => 'user_id', :class_name => "Fitness"
+
+  scope :favoritos_dieta, lambda {|term = nil| joins(:diets_users).where("diets_users.diet_id = ?", "#{term}") }
+
+  scope :favoritos_ejercicio, lambda {|term = nil| joins(:fitnesses_users).where("fitnesses_users.fitness_id = ?", "#{term}") }
+
+   validates :email, uniqueness: {case_sensitive: false, message: 'El correo no es válido'}, length: {in: 4..20, too_short: "El correo debe tener al menos %{count} caracteres"}, format: {with: /\A(\S+)@(.+)\.(\S+)\z/, message: "Formato de correo no valido"}
+
+  validates :password, confirmation: true, length: {within: 4..10, too_short: " debe tener al menos %{count} caracteres"}, presence: {if: :password_required, message: "no puede estar en blanco"}
+  validates :password_confirmation, presence: {if: :password_required, message: "no puede estar en blanco"}
+
+  def self.authenticate(email,password)
+    user = find_by_email(email)
+    return user if user && user.authenticated?(password)
+  end
+
+  def authenticated?(password)
+    self.hashed_password == encrypt(password)
+  end
+
+  protected
+    def password_required
+      hashed_password.blank? || password.present?
+    end
+
+    def encrypt_new_password
+      return if password.blank?
+      self.hashed_password = encrypt(password)
+    end
+
+    def encrypt(string)
+      Digest::SHA1.hexdigest(string)
+    end
+end

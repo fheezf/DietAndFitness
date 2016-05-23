@@ -1,0 +1,4 @@
+class AddImagenToDiets < ActiveRecord::Migration
+  def change
+  end
+end

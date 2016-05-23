@@ -1,0 +1,28 @@
+CACHE MANIFEST
+# v0.122122
+CACHE:
+/assets/application.css?body=1
+/assets/diets.css?body=1
+/assets/fitnesses.css?body=1
+/assets/scaffolds.css?body=1
+/assets/users.css?body=1
+/assets/jquery.mobile.css?body=1
+/assets/jquery.js?body=1
+/assets/jquery_ujs.js?body=1
+/assets/jquery.mobile.js?body=1
+/assets/diets.js?body=1
+/assets/fitnesses.js?body=1
+/assets/sessions.js?body=1
+/assets/users.js?body=1
+/assets/application.js?body=1
+/assets/DAW2-ej1.css?body=1
+/assets/portal-ajax.js?body=1
+/nosotros.html
+/diets.html
+/fitnesses.html
+
+NETWORK:
+*
+FALLBACK:
+
+/ /no_disponible.html

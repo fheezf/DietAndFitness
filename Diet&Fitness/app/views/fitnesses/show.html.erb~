@@ -1,0 +1,123 @@
+<% if flash.any? %>
+    <div id="error_explanation">
+      <ul>
+      <% flash.keys.each do |msg| %>
+        <li><%= flash[msg] %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<%= content_for :titulo, @fitness.title %>
+<% content_for :botones do %>
+    <%= link_to 'Atras', :back, class: "miboton ui-btn-left ui-btn  ui-corner-all ui-btn-icon-notext ui-icon-back" %>
+<% end %>
+
+
+<p>
+  <strong>Author:</strong>
+  <%= @fitness.author %>
+</p>
+<div class="ui-btn-right" id="punctuation">
+      <% if @diet.punctuation < 0 %>
+        <button id="rojo" class="btn-punctuation ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-minus"></button>
+        <h3> <%= @fitness.punctuation %> </h3>
+        <% if current_user %>
+            <%= link_to 'suma', puntuacion_fitness_path(id:@fitness, flag:"suma"), {:remote => true, id: "verde", class: "ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-u"} %>
+            <%= link_to 'resta', puntuacion_fitness_path(id:@fitness, flag:"resta"), {:remote => true, id: "rojo", class: "ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-d"} %>
+        <% else %>
+            <%= link_to 'suma', puntuacion_fitness_path(id:@fitness, flag:"suma"), {:remote => true, id: "verde", class: "btn-disabled ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-u"} %>
+            <%= link_to 'resta', puntuacion_fitness_path(id:@fitness, flag:"resta"), {:remote => true, id: "rojo", class: "btn-disabled ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-d"} %>
+        <% end %>
+      <% else %>
+        <button id="verde" class="btn-punctuation ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-plus"></button>
+        <h3><%= @fitness.punctuation %></h3>
+        <% if current_user %>
+            <%= link_to 'suma', puntuacion_fitness_path(id:@fitness, flag:"suma"), {:remote => true, id: "verde", class: "ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-u"} %>
+            <%= link_to 'resta', puntuacion_fitness_path(id:@fitness, flag:"resta"), {:remote => true, id: "rojo", class: "ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-d"} %>
+        <% else %>
+            <%= link_to 'suma', puntuacion_fitness_path(id:@fitness, flag:"suma"), {:remote => true, id: "verde", class: "btn-disabled ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-u"} %>
+            <%= link_to 'resta', puntuacion_fitness_path(id:@fitness, flag:"resta"), {:remote => true, id: "rojo", class: "btn-disabled ui-btn ui-corner-all ui-btn-inline ui-btn-icon-notext ui-icon-arrow-d"} %>
+        <% end %>
+      <% end %>
+    </div>
+
+<p>
+  <strong>Duration:</strong>
+  <%= @fitness.duration %>
+</p>
+
+<p>
+  <strong>Difficulty:</strong>
+  <%= @fitness.difficulty %>
+</p>
+
+<p>
+  <strong>Imagen:</strong>
+</p>
+
+<p>
+  <%= image_tag(@fitness.imagen_url ) if @fitness.imagen.present? %>
+</p>
+
+<p>
+  <strong>Ejercicios:</strong>
+</p>
+<div data-role="collapsibleset" >
+  <% a = @fitness.exercises.split("|") %>
+  <% count = 0 %>
+  <% week = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"] %>
+  <% for i in 0..6 %>
+     <div data-role="collapsible">
+     <h2><%= week[i] %></h2>
+     <ul data-role="listview" data-theme="c" data-inset="true">
+          <% list2 = a[i].split(",") %>
+          <% list2.each do |lista| %>
+                 <li><%= lista %></li>
+          <% end %>
+      </ul>
+      </div>
+  <% end %>
+</div>
+
+<p>
+  <strong>Descrición:</strong>
+  <textarea><%= @fitness.description %></textarea>
+</p>
+
+<div class="ui-grid-b ui-responsive" id="showbotones">
+  <% if current_user %>
+    <div class="ui-block-a"><%= link_to "Favorito", toggle_favorito_fitness_path(id:@fitness), {:remote => true, class: "ui-btn ui-corner-all ui-btn-icon-top ui-icon-#{favv(@fitness)} ui-btn-d"} %></div>
+    <div class="ui-block-b"><%= link_to 'Editar', edit_fitness_path(@fitness), class: "ui-btn ui-corner-all ui-btn-icon-top ui-icon-info ui-btn-d" %></div>
+    <div class="ui-block-c"><%= link_to "Eliminar", @fitness, method: :delete, data: {confirm: "¿Estas seguro que quieres eliminarlo?" }, class: "ui-btn ui-corner-all ui-btn-icon-top ui-icon-delete" %></div>
+  <% else %>
+    <div class="ui-block-a"><%= link_to "Favorito", toggle_favorito_fitness_path(id:@fitness), {:remote => true, class: "btn-disabled ui-btn ui-corner-all ui-btn-icon-top ui-icon-plus ui-btn-d"} %></div>
+    <div class="ui-block-b"><%= link_to 'Editar', edit_fitness_path(@fitness), class: "btn-disabled ui-btn ui-corner-all ui-btn-icon-top ui-icon-info ui-btn-d" %></div>
+    <div class="ui-block-c"><%= link_to "Eliminar", @fitness, method: :delete, data: {confirm: "¿Estas seguro que quieres eliminarlo?" }, class: "btn-disabled ui-btn ui-corner-all ui-btn-icon-top ui-icon-delete" %></div>
+  <% end %>
+  
+</div>
+
+<%= content_for :footer do %>
+  <div data-role="footer" data-position="fixed" data-theme="b">
+		  <div data-role="navbar">
+			<ul >
+				<li><a href="/nosotros.html" class="ui-btn-active ui-btn-icon-top ui-icon-info" data-ajax="false">Nosotros</a></li>
+				<li><a href="/fitnesses" class="ui-btn-icon-top ui-icon-bars" data-ajax="false">Ejercicios</a></li>
+				 <% if current_user %>
+				  <li><a href="/fitnesses?user_id=<%= current_user.id %>" class="ui-btn-icon-top ui-icon-star" data-ajax="false" >Favoritos</a></li>
+        <% else %>
+          <li><a href="/fitnesses?user_id=" class="btn-disabled ui-btn-icon-top ui-icon-star" data-ajax="false" >Favoritos</a></li>
+        <% end %>
+			</ul>	
+		  </div>
+		</div> <!--fin del Footer-->
+<% end %>
+
+<script>
+$(document).on("pagecreate", function(){
+      $('.ui-navbar .ui-btn').removeClass("ui-btn-active");
+      $('.ui-navbar .ui-block-b .ui-btn').addClass("ui-btn-active");
+
+});
+</script>

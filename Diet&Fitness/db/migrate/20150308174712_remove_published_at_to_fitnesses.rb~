@@ -1,0 +1,4 @@
+class RemovePublishedAtToFitnesses < ActiveRecord::Migration
+  def change
+  end
+end

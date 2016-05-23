@@ -1,0 +1,3 @@
+<% content_for :titulo, "Editar Usuario" %>
+<%= render 'form' %>
+<%= button_to 'Cancelar', root_path, :id => "button", :method => :get %>

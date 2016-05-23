@@ -1,0 +1,78 @@
+  <%= content_for :titulo, @diet.title.present? ? @diet.title : "Nueva Dieta" %>
+  <% content_for :botones do %>
+    <%= link_to 'Atras', :back, class: "miboton ui-btn-left ui-btn  ui-corner-all ui-btn-icon-notext ui-icon-back" %>
+  <% end %>
+
+<%= form_for(@diet, html: {multipart: true, "data-ajax" => "false"}) do |f| %>
+  <% if @diet.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@diet.errors.count, "error") %> prohibited this diet from being saved:</h2>
+
+      <ul>
+      <% @diet.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="field ui-field-contain">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field ui-field-contain">
+    <%= f.label :duration %><br>
+    <%= f.select :duration, [['duración ...',''],['1 semana'],['2 semanas'],['3 semanas'],['4 semanas'],['5 semanas'],['6 semanas'],['7 semanas'],['8 semanas'],['9 semanas'],['10 semanas'],['11 semanas'],['12 semanas'],['13 semanas'],['14 semanas'],['15 semanas'],['16 semanas'],['17 semanas'],['18 semanas'],['19 semanas'],['20 semanas']], {}, "data-native-menu" => :false%>
+  </div>
+  <div class="field ui-field-contain">
+    <%= f.label :difficulty %><br>
+    <%= f.select :difficulty,  [['dificultad ...',''],['Muy Baja'],['Baja'],['Media'],['Alta'],['Muy Alta']], {}, "data-native-menu" => :false %>
+  </div>
+  <div class="field ui-field-contain">
+      <%= f.label :foods %><br>
+     <% if @diet.foods != nil %>
+        <% a=@diet.foods.split("|") %>
+     <% end %>
+     <fieldset data-role="controlgroup" data-type="horizontal">
+        Lunes: <%= text_field_tag "foods[]", @diet.foods.present? ? a[0] : "" %>
+        Martes: <%= text_field_tag "foods[]", @diet.foods.present? ? a[1] : "" %>
+        Miércoles: <%= text_field_tag "foods[]", @diet.foods.present? ? a[2] : "" %>
+        Jueves: <%= text_field_tag "foods[]", @diet.foods.present? ? a[3] : "" %>
+        Viernes: <%= text_field_tag "foods[]", @diet.foods.present? ? a[4] : "" %>
+        Sábado: <%= text_field_tag "foods[]", @diet.foods.present? ? a[5] : "" %>
+        Domingo: <%= text_field_tag "foods[]", @diet.foods.present? ? a[6] : "" %>
+     </fieldset>
+  </div>
+  <div class="field ui-field-contain">
+     <%= f.label :description %><br>
+     <%= f.text_area :description %>
+  </div>
+  <div class="field ui-field-contain">
+    <%= f.label :imagen %>
+    <%= f.file_field :imagen %>
+  </div>
+  <div class="actions">
+    <%= f.submit @diet.title.present? ? "Actualizar" : "Crear" %>
+  </div>
+<% end %>
+
+<%= content_for :footer do %>
+  <div data-role="footer" data-position="fixed" data-theme="b">
+		  <div data-role="navbar">
+			<ul >
+				<li><a href="/nosotros.html" class="ui-btn-active ui-btn-icon-top ui-icon-info" data-ajax="false">Nosotros</a></li>
+				<li><a href="/diets" class="ui-btn-icon-top ui-icon-bars" data-ajax="false">Dietas</a></li>
+				<li><a href="/diets?user_id=<%= current_user.id %>" class="ui-btn-icon-top ui-icon-star" data-ajax="false" >Favoritos</a></li>
+			</ul>	
+		  </div>
+		</div> <!--fin del Footer-->
+<% end %>
+
+<script>
+$(document).on("pagecreate", function(){
+      $('.ui-navbar .ui-btn').removeClass("ui-btn-active");
+      $('.ui-navbar .ui-block-b .ui-btn').addClass("ui-btn-active");
+
+});
+</script>

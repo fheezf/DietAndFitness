@@ -1,0 +1,4 @@
+class AddUserIdToFitnesses < ActiveRecord::Migration
+  def change
+  end
+end

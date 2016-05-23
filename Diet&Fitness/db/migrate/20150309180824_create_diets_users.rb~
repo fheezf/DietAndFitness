@@ -1,0 +1,6 @@
+class CreateDietsUsers < ActiveRecord::Migration
+  def change
+    create_table :diets_users do |t|
+    end
+  end
+end

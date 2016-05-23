@@ -1,0 +1,86 @@
+<% if flash.any? %>
+    <div id="error_explanation">
+      <ul>
+      <% flash.keys.each do |msg| %>
+        <li><%= flash[msg] %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+<% content_for :botones do %>
+    <div class="ui-btn-left">
+      <%= link_to 'Atras', :back, class: "miboton ui-btn-inline ui-btn  ui-corner-all ui-btn-icon-notext ui-icon-back" %>
+      <%= link_to "Nueva dieta", new_diet_path, class: "miboton ui-btn  ui-corner-all ui-btn-icon-notext ui-btn-inline ui-icon-plus"%>
+    </div>
+    
+<% end %>
+
+<%= content_for :titulo, "Dietas" %>
+
+<ul id="diets" data-role="listview" data-autodividers="true" data-filter="true">
+  
+</ul>
+
+<%= content_for :footer do %>
+  <div data-role="footer" data-position="fixed" data-theme="b">
+		  <div data-role="navbar">
+			<ul >
+				<li><a href="/nosotros.html" class="ui-btn-active ui-btn-icon-top ui-icon-info" data-ajax="false">Nosotros</a></li>
+				<li><a href="/diets" class="ui-btn-icon-top ui-icon-bars" data-ajax="false">Dietas</a></li>
+        <li><a href="/diets?user_id=" class="btn-disabled ui-btn-icon-top ui-icon-star" data-ajax="false" >Favoritos</a></li>
+			</ul>	
+		  </div>
+		</div> <!--fin del Footer-->
+<% end %>
+
+<script>
+$(document).on("pagecreate", function(){
+      $('.ui-navbar .ui-btn').removeClass("ui-btn-active");
+      url = document.location.href;
+      var patt = new RegExp("user_id");
+      var res = patt.test(url);
+      if (res) {
+        $('.ui-navbar .ui-block-c .ui-btn').addClass("ui-btn-active");
+      }else{
+        $('.ui-navbar .ui-block-b .ui-btn').addClass("ui-btn-active");
+      }
+
+    
+
+
+
+    var a = document.createElement("img");
+    var marca = Date.now();
+    a.src = "http://192.168.1.37:3000/assets/images/icons-png/alert-black.png?"+marca;
+    a.onerror = onErrorHandler;
+    a.onload = onSuccessHandler;
+
+ function onErrorHandler(){
+     $(".ui-footer .ui-block-c a").removeClass('ui-icon-star');
+     $(".ui-footer .ui-block-c a").addClass('ui-icon-lock');
+   }
+
+    function onSuccessHandler(){
+
+          if (localStorage.getItem("logged") != "false") {
+            var src = "/diets?user_id="+localStorage.getItem("logged")[6];
+            $(".ui-footer .ui-grid-b .ui-block-c a").attr("href", src);
+            $(".ui-footer .ui-block-c a").removeClass('btn-disabled');
+          }
+    }
+
+     $("#diets").on("click","li", function(e){
+
+        var key = $(this).attr('id');
+        localStorage.setItem("pulsado", key);
+
+      
+      }); 
+
+});
+
+  
+
+</script>
